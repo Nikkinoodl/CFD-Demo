@@ -2,6 +2,7 @@
 using OxyPlot.Series;
 using OxyPlot.Axes;
 using System.Diagnostics;
+using Timer = System.Windows.Forms.Timer;
 
 namespace CFD_Demo
 {
@@ -105,6 +106,10 @@ namespace CFD_Demo
                 p[i, ny - 1] = 1;
             }
 
+            //Timer for the main calc loop
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
             //Timesteps
             for (float t = 0; t < tmax + dt; t += dt)
             {
@@ -201,6 +206,9 @@ namespace CFD_Demo
                 //***We do not need to reset u, v, p Dirichlet conditions at the boundary
             }
 
+            watch.Stop();
+            DisplayTime(watch.Elapsed.ToString());
+
             //Display Reynolds number
             float reynolds = (float)(uTop * Lx / nu);
             if (nu > 0)
@@ -227,6 +235,11 @@ namespace CFD_Demo
         private void DisplayCFL(string txt)
         {
             label5.Text = txt;
+        }
+
+        private void DisplayTime(string txt)
+        {
+            label6.Text = "Time Elapsed : " + txt;
         }
 
         private void button1_Click(object sender, EventArgs e)
