@@ -107,13 +107,13 @@ namespace CFD_Demo
             }
 
             //Timer for the main calc loop
-            Stopwatch watch = new Stopwatch();
+            Stopwatch watch = new();
             watch.Start();
 
             //Timesteps
             for (float t = 0; t < tmax + dt; t += dt)
             {
-                //u and v momentum calcs can be done in parallel
+                //u and v momentum calcs can be done in parallel - but only saves approx. 1s on 81x81 grid
                 Parallel.Invoke(() =>
                 {
                     int i, j;
@@ -183,12 +183,12 @@ namespace CFD_Demo
                 //Reset pressure boundary conditions
                 for (i = 0; i < nx; i++)
                 {
-                    //dp/dy = 0 at bottom (Neuman)
+                    //dp/dy = 0 at bottom (Neumann)
                     p[i, 0] = p[i, 1];
                 }
                 for (j = 0; j < ny; j++)
                 {
-                    //dp/dx = 0 at LHS and RHS (Neuman)
+                    //dp/dx = 0 at LHS and RHS (Neumann)
                     p[0, j] = p[1, j];
                     p[nx - 1, j] = p[nx - 2, j];
                 }
