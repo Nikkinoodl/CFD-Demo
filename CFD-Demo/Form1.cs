@@ -28,13 +28,9 @@ namespace CFD_Demo
         }
 
         /// <summary>
-        /// Rewrite this to do the following:
-        ///  More compact code
-        ///  Timer
-        ///  Numpy.Net or some other way to speed things up
-        ///  Tighten up plotting
+        /// The main CFD solver
         /// </summary>
-        /// <returns></returns>
+        /// <returns>PMCollection</returns>
         private PMCollection SolveLidCavity()
         {
             //Number of grid nodes
@@ -79,7 +75,7 @@ namespace CFD_Demo
             var dx = x[1] - x[0];
             var dy = y[1] - y[0];
 
-            //Precompute cell sizes, squares and inverses
+            //Precompute cell size squares and inverses
             var dx2 = dx * dx;
             var dy2 = dy * dy;
             var dxi = 1 / dx;
@@ -105,6 +101,9 @@ namespace CFD_Demo
                 u[i, ny - 1] = uTop;
                 p[i, ny - 1] = 1;
             }
+            //The top corner u's should be set to zero
+            u[0, ny - 1] = 0;
+            u[nx - 1, ny - 1] = 0;
 
             //Timer for the main calc loop
             Stopwatch watch = new();
@@ -113,13 +112,12 @@ namespace CFD_Demo
             //Timesteps
             for (float t = 0; t < tmax + dt; t += dt)
             {
-                //u and v momentum calcs can be done in parallel - but only saves approx. 1s on 81x81 grid
+                //u and v momentum calcs are done in parallel (but only saves < 1s on 81x81 grid)
                 Parallel.Invoke(() =>
                 {
                     int i, j;
-                    uStar = (double[,])u.Clone();
 
-                    //u momentum 
+                    //u momentum prediction step
                     for (j = 1; j < ny - 1; j++)   //bc's set u, v on boundary
                     {
                         for (i = 1; i < nx - 1; i++) //bc's set u, v on boundary
@@ -136,9 +134,7 @@ namespace CFD_Demo
                 {
                     int i, j;
 
-                    vStar = (double[,])v.Clone();
-
-                    //v momentum 
+                    //v momentum prediction step
                     for (j = 1; j < ny - 1; j++)
                     {
                         for (i = 1; i < nx - 1; i++)
@@ -152,6 +148,10 @@ namespace CFD_Demo
                     }
                 });
 
+                //Note: Although it's possible to do so (because the solution converges as t increases),
+                //doing the pressure steps in parallel with the momentum steps does not reduce compute time
+                //significantly (only about 0.1s)
+
                 //RHS term of PPE
                 //b = (rho/dt) * divergence_vel_star calculated with central differencing
                 for (j = 1; j < ny - 1; j++)
@@ -162,9 +162,10 @@ namespace CFD_Demo
                     }
                 }
 
-                //Calculate pressure
+                //Clone pressure array for a clear distinction between pn and pn + 1
                 double[,] pn = (double[,])p.Clone();
 
+                //Calculate pressure
                 //While optional iteration on p
                 int n = 0;
                 while (n < 1)
@@ -181,6 +182,7 @@ namespace CFD_Demo
                 }
 
                 //Reset pressure boundary conditions
+                //We do not need to reset u, v, p Dirichlet bc's
                 for (i = 0; i < nx; i++)
                 {
                     //dp/dy = 0 at bottom (Neumann)
@@ -193,7 +195,7 @@ namespace CFD_Demo
                     p[nx - 1, j] = p[nx - 2, j];
                 }
 
-                //Pressure correction with central differencing for dp
+                //Pressure correction step with central differencing for dp
                 for (j = 1; j < ny - 1; j++)
                 {
                     for (i = 1; i < nx - 1; i++)
@@ -202,8 +204,6 @@ namespace CFD_Demo
                         v[i, j] = vStar[i, j] - (p[i, j + 1] - p[i, j - 1]) * 0.5 * dyi * dt * rhoi;
                     }
                 }
-
-                //***We do not need to reset u, v, p Dirichlet conditions at the boundary
             }
 
             watch.Stop();
@@ -223,7 +223,7 @@ namespace CFD_Demo
                 DisplayCFL("CFL : " + CFL.ToString());
             }
 
-            PMCollection pmCollection = new(nx, ny, dx, dy, x, y, u, p, v);
+            PMCollection pmCollection = new(nx, ny, uTop, dx, dy, x, y, u, p, v);
 
             return pmCollection;
         }
@@ -272,6 +272,14 @@ namespace CFD_Demo
                 plot1.Model = pmCollection.pModel;
                 plot1.Refresh();
             }
+            if (radioButton4.Checked == true && pmCollection != null)
+            {
+                plot1.Model = pmCollection.lModel;
+                plot1.Refresh();
+            }
+
+
+
         }
         private void radioButton1_Click(object sender, EventArgs e)
         {
@@ -282,6 +290,10 @@ namespace CFD_Demo
             ChangeDisplayType();
         }
         private void radioButton3_Click(object sender, EventArgs e)
+        {
+            ChangeDisplayType();
+        }
+        private void radioButton4_Click(object sender, EventArgs e)
         {
             ChangeDisplayType();
         }

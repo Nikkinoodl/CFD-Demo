@@ -51,10 +51,11 @@
             this.label13 = new System.Windows.Forms.Label();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
@@ -240,34 +241,23 @@
             this.radioButton1.Checked = true;
             this.radioButton1.Location = new System.Drawing.Point(40, 44);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(106, 24);
+            this.radioButton1.Size = new System.Drawing.Size(40, 24);
             this.radioButton1.TabIndex = 28;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "U velocities";
+            this.radioButton1.Text = "U";
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.Click += new System.EventHandler(this.radioButton1_Click);
             // 
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(183, 44);
+            this.radioButton2.Location = new System.Drawing.Point(86, 44);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(105, 24);
+            this.radioButton2.Size = new System.Drawing.Size(39, 24);
             this.radioButton2.TabIndex = 29;
-            this.radioButton2.Text = "V velocities";
+            this.radioButton2.Text = "V";
             this.radioButton2.UseVisualStyleBackColor = true;
             this.radioButton2.Click += new System.EventHandler(this.radioButton2_Click);
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(325, 44);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(85, 24);
-            this.radioButton3.TabIndex = 30;
-            this.radioButton3.Text = "pressure";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.Click += new System.EventHandler(this.radioButton3_Click);
             // 
             // label14
             // 
@@ -288,13 +278,38 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.radioButton4);
             this.panel1.Controls.Add(this.radioButton3);
             this.panel1.Controls.Add(this.radioButton2);
             this.panel1.Controls.Add(this.radioButton1);
-            this.panel1.Location = new System.Drawing.Point(1335, 550);
+            this.panel1.Location = new System.Drawing.Point(1301, 550);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(424, 119);
+            this.panel1.Size = new System.Drawing.Size(366, 119);
             this.panel1.TabIndex = 33;
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Location = new System.Drawing.Point(221, 44);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(111, 24);
+            this.radioButton4.TabIndex = 32;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "Centerline U";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4.Click += new System.EventHandler(this.radioButton4_Click);
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(131, 44);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(84, 24);
+            this.radioButton3.TabIndex = 31;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "Pressure";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.Click += new System.EventHandler(this.radioButton3_Click);
             // 
             // label5
             // 
@@ -380,11 +395,12 @@
         private Label label13;
         private RadioButton radioButton1;
         private RadioButton radioButton2;
-        private RadioButton radioButton3;
         private Label label14;
         private Label label15;
         private Panel panel1;
         private Label label5;
         private Label label6;
+        private RadioButton radioButton3;
+        private RadioButton radioButton4;
     }
 }

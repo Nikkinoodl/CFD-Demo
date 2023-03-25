@@ -1,4 +1,5 @@
-﻿using OxyPlot;
+﻿using MathNet.Numerics;
+using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 
@@ -9,9 +10,13 @@ namespace CFD_Demo
         public PlotModel uModel;
         public PlotModel vModel;
         public PlotModel pModel;
+        public PlotModel lModel;
 
-        public PMCollection(int nx, int ny, double dx, double dy, double[] x, double[] y, double[,] u, double[,] v, double[,] p)
+        public PMCollection(int nx, int ny, double uTop, double dx, double dy, double[] x, double[] y, double[,] u, double[,] v, double[,] p)
         {
+
+            //u, v and p plots are all based on heatmap and contours, so they can be set up together
+
             //Add heatmaps
             HeatMapSeries heatMap1 = new() { Data = u };
             HeatMapSeries heatMap2 = new() { Data = v };
@@ -45,7 +50,7 @@ namespace CFD_Demo
                 c.Color = OxyColors.White;
                 c.LineStyle = LineStyle.Solid;
                 c.FontSize = 0;
-                c.ContourLevelStep = 1;
+                c.ContourLevelStep = 0.25;
                 c.LabelBackground = OxyColors.Undefined;
                 c.ColumnCoordinates = x;
                 c.RowCoordinates = y;
@@ -57,9 +62,9 @@ namespace CFD_Demo
             PlotModel _pModel = new() { Title = "Pressure P in Lid Cavity" };
 
             //Add axes and assign heat map and contour series
-            List<PlotModel> pmList = new List<PlotModel> { _uModel, _vModel, _pModel };
+            List<PlotModel> pmList = new() { _uModel, _vModel, _pModel };
 
-            int i = 0;
+            int n = 0;
 
             foreach (var m in pmList)
             {
@@ -73,15 +78,82 @@ namespace CFD_Demo
                     TextColor = OxyColors.Black
                 });
 
-                m.Series.Add(hmList[i]);
-                m.Series.Add(csList[i]);
+                m.Axes.Add(new LinearAxis()
+                {
+                    MajorGridlineStyle = LineStyle.Solid,
+                    Position = AxisPosition.Left,
+                    Title = "Y position"
+                });
 
-                i++;
+                m.Axes.Add(new LinearAxis()
+                {
+                    MajorGridlineStyle = LineStyle.Solid,
+                    Position = AxisPosition.Bottom,
+                    Title = "X Position"
+                });
+
+                m.Series.Add(hmList[n]);
+                m.Series.Add(csList[n]);
+
+                n++;
             }
 
             uModel = _uModel;
             vModel = _vModel;
             pModel = _pModel;
+
+            //Midpoint line plots are created using a different series
+            LineSeries uLine = new()
+            {
+                Color = OxyColors.SkyBlue,
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 6,
+                MarkerStroke = OxyColors.White,
+                MarkerFill = OxyColors.SkyBlue,
+                MarkerStrokeThickness = 1.5
+            };
+
+
+            //Test for odd or even nx
+
+            int midX;
+
+            if (nx % 2 != 0)
+                midX = (nx - 1) / 2;
+            else
+                midX = nx / 2;
+
+            //Find U data points at the X center line
+            for (int j = 0; j < ny; j++)
+            {
+                uLine.Points.Add(new DataPoint(y[j]/(dy * (ny - 1)), u[midX, j] / uTop));
+
+            }
+
+            //Add plot model for u velocities at midline
+            PlotModel _lModel = new()
+            {
+                Title = "U Velocities at Mid Line",
+                PlotType = PlotType.XY
+            };
+
+            _lModel.Axes.Add(new LinearAxis()
+            {
+                MajorGridlineStyle = LineStyle.Solid,
+                Position = AxisPosition.Bottom,
+                Title = "Height y/Ly" 
+            }) ;
+
+            _lModel.Axes.Add(new LinearAxis()
+            {
+                MajorGridlineStyle = LineStyle.Solid,
+                Position = AxisPosition.Left,
+                Title = "u/U"
+            });
+
+            _lModel.Series.Add(uLine);
+
+            lModel = _lModel;
 
         }
     }
