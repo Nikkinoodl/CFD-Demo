@@ -58,6 +58,8 @@
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.button2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -239,7 +241,7 @@
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(40, 44);
+            this.radioButton1.Location = new System.Drawing.Point(33, 48);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(40, 24);
             this.radioButton1.TabIndex = 28;
@@ -251,7 +253,7 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(86, 44);
+            this.radioButton2.Location = new System.Drawing.Point(79, 48);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(39, 24);
             this.radioButton2.TabIndex = 29;
@@ -282,15 +284,15 @@
             this.panel1.Controls.Add(this.radioButton3);
             this.panel1.Controls.Add(this.radioButton2);
             this.panel1.Controls.Add(this.radioButton1);
-            this.panel1.Location = new System.Drawing.Point(1301, 550);
+            this.panel1.Location = new System.Drawing.Point(1361, 549);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(366, 119);
+            this.panel1.Size = new System.Drawing.Size(334, 119);
             this.panel1.TabIndex = 33;
             // 
             // radioButton4
             // 
             this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(221, 44);
+            this.radioButton4.Location = new System.Drawing.Point(214, 49);
             this.radioButton4.Name = "radioButton4";
             this.radioButton4.Size = new System.Drawing.Size(111, 24);
             this.radioButton4.TabIndex = 32;
@@ -302,7 +304,7 @@
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(131, 44);
+            this.radioButton3.Location = new System.Drawing.Point(124, 48);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(84, 24);
             this.radioButton3.TabIndex = 31;
@@ -329,12 +331,23 @@
             this.label6.TabIndex = 35;
             this.label6.Text = "Calc Time: ";
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(1485, 491);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(87, 32);
+            this.button2.TabIndex = 36;
+            this.button2.Text = "Save Plot";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1801, 863);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.panel1);
@@ -402,5 +415,7 @@
         private Label label6;
         private RadioButton radioButton3;
         private RadioButton radioButton4;
+        private SaveFileDialog saveFileDialog1;
+        private Button button2;
     }
 }

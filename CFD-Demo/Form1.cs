@@ -3,12 +3,16 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 using System.Diagnostics;
 using Timer = System.Windows.Forms.Timer;
+using OxyPlot.WindowsForms;
+using MathNet.Numerics.LinearAlgebra.Factorization;
+using System.Windows.Forms;
 
 namespace CFD_Demo
 {
     public partial class Form1 : Form
     {
-        public PMCollection? pmCollection;
+        private PMCollection? pmCollection;
+        private float reynolds;
         public Form1()
         {
             InitializeComponent();
@@ -209,12 +213,13 @@ namespace CFD_Demo
             watch.Stop();
             DisplayTime(watch.Elapsed.ToString());
 
-            //Display Reynolds number
-            float reynolds = (float)(uTop * Lx / nu);
-            if (nu > 0)
-            {
-                DisplayRe("Re : " + reynolds.ToString());
-            };
+            //Calculate and display Reynolds number
+             if (nu > 0)
+                reynolds = (float)(uTop * Lx / nu);
+            else
+                reynolds = 0;
+
+            DisplayRe("Re: " + reynolds.ToString());
 
             //Display CFL
             float CFL = (float)(uTop * dt * dxi);
@@ -223,7 +228,7 @@ namespace CFD_Demo
                 DisplayCFL("CFL : " + CFL.ToString());
             }
 
-            PMCollection pmCollection = new(nx, ny, uTop, dx, dy, x, y, u, p, v);
+            PMCollection pmCollection = new(nx, ny, reynolds, uTop, dx, dy, x, y, u, p, v);
 
             return pmCollection;
         }
@@ -242,6 +247,11 @@ namespace CFD_Demo
             label6.Text = "Time Elapsed : " + txt;
         }
 
+        /// <summary>
+        /// Calls the CFD solution
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             //Run the lid cavity CFD
@@ -249,6 +259,27 @@ namespace CFD_Demo
 
             //Display initial plot depending on selection
             ChangeDisplayType();
+        }
+
+        /// <summary>
+        /// Saves the current plotted image to a file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var plotModel = plot1.Model;
+
+            SaveFileDialog f = new();
+            f.AddExtension = true;
+            f.Filter = "Portable Network Graphics|*.png";
+            f.FileName = plotModel.Title + ".png";
+            if (f.ShowDialog() == DialogResult.OK)
+            {
+                var pngExporter = new PngExporter { Width = 800, Height = 800, Resolution = 120 };
+                pngExporter.ExportToFile(plotModel, f.FileName);
+
+            }
         }
 
         /// <summary>
@@ -277,9 +308,6 @@ namespace CFD_Demo
                 plot1.Model = pmCollection.lModel;
                 plot1.Refresh();
             }
-
-
-
         }
         private void radioButton1_Click(object sender, EventArgs e)
         {

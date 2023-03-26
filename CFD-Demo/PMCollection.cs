@@ -12,7 +12,7 @@ namespace CFD_Demo
         public PlotModel pModel;
         public PlotModel lModel;
 
-        public PMCollection(int nx, int ny, double uTop, double dx, double dy, double[] x, double[] y, double[,] u, double[,] v, double[,] p)
+        public PMCollection(int nx, int ny, float re, double uTop, double dx, double dy, double[] x, double[] y, double[,] u, double[,] v, double[,] p)
         {
 
             //u, v and p plots are all based on heatmap and contours, so they can be set up together
@@ -36,6 +36,7 @@ namespace CFD_Demo
                 h.FontSize = 0.2;
                 h.TextColor = OxyColors.Black;
                 h.FontWeight = FontWeights.Normal;
+                h.Background = OxyColors.White;
             }
 
             //Add contours
@@ -54,12 +55,13 @@ namespace CFD_Demo
                 c.LabelBackground = OxyColors.Undefined;
                 c.ColumnCoordinates = x;
                 c.RowCoordinates = y;
+                c.Background = OxyColors.White;
             }
 
             //Add plot models for u, v velocities and pressure p
-            PlotModel _uModel = new() { Title = "U Velocities in Lid Cavity" };
-            PlotModel _vModel = new() { Title = "V Velocities in Lid Cavity" };
-            PlotModel _pModel = new() { Title = "Pressure P in Lid Cavity" };
+            PlotModel _uModel = new() { Title = "U Velocities in Lid Cavity - Re " + re, Background = OxyColors.White };
+            PlotModel _vModel = new() { Title = "V Velocities in Lid Cavity - Re " + re, Background = OxyColors.White };
+            PlotModel _pModel = new() { Title = "Pressure P in Lid Cavity - Re " + re, Background = OxyColors.White };
 
             //Add axes and assign heat map and contour series
             List<PlotModel> pmList = new() { _uModel, _vModel, _pModel };
@@ -82,7 +84,7 @@ namespace CFD_Demo
                 {
                     MajorGridlineStyle = LineStyle.Solid,
                     Position = AxisPosition.Left,
-                    Title = "Y position"
+                    Title = "Y position"                    
                 });
 
                 m.Axes.Add(new LinearAxis()
@@ -110,9 +112,9 @@ namespace CFD_Demo
                 MarkerSize = 6,
                 MarkerStroke = OxyColors.White,
                 MarkerFill = OxyColors.SkyBlue,
-                MarkerStrokeThickness = 1.5
+                MarkerStrokeThickness = 1.5,
+                Background = OxyColors.White
             };
-
 
             //Test for odd or even nx
 
@@ -133,8 +135,9 @@ namespace CFD_Demo
             //Add plot model for u velocities at midline
             PlotModel _lModel = new()
             {
-                Title = "U Velocities at Mid Line",
-                PlotType = PlotType.XY
+                Title = "U Velocities at Mid Line - Re " + re,
+                PlotType = PlotType.XY,
+                Background = OxyColors.White
             };
 
             _lModel.Axes.Add(new LinearAxis()
