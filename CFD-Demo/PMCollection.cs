@@ -12,7 +12,7 @@ namespace CFD_Demo
         public PlotModel pModel;
         public PlotModel lModel;
 
-        public PMCollection(int nx, int ny, float re, double uTop, double dx, double dy, double[] x, double[] y, double[,] u, double[,] v, double[,] p)
+        public PMCollection(int nx, int ny, double re, double uTop, double dx, double dy, double[] x, double[] y, double[,] u, double[,] v, double[,] p)
         {
 
             //u, v and p plots are all based on heatmap and contours, so they can be set up together
@@ -33,7 +33,7 @@ namespace CFD_Demo
                 h.CoordinateDefinition = HeatMapCoordinateDefinition.Edge;
                 h.Interpolate = true;
                 h.Font = "Segoe UI";
-                h.FontSize = 0.2;
+                h.FontSize = 0.0;
                 h.TextColor = OxyColors.Black;
                 h.FontWeight = FontWeights.Normal;
                 h.Background = OxyColors.White;
@@ -45,13 +45,13 @@ namespace CFD_Demo
             ContourSeries cs3 = new() { Data = p };
 
             List<ContourSeries> csList = new() { cs1, cs2, cs3 };
-
+            
             foreach (var c in csList)
             {
                 c.Color = OxyColors.White;
                 c.LineStyle = LineStyle.Solid;
-                c.FontSize = 0;
-                c.ContourLevelStep = 0.25;
+                c.FontSize = 0.0;
+                c.ContourLevelStep = 0.5;
                 c.LabelBackground = OxyColors.Undefined;
                 c.ColumnCoordinates = x;
                 c.RowCoordinates = y;
@@ -125,7 +125,7 @@ namespace CFD_Demo
             else
                 midX = nx / 2;
 
-            //Find U data points at the X center line
+            //Find u data points at the X center line
             for (int j = 0; j < ny; j++)
             {
                 uLine.Points.Add(new DataPoint(y[j]/(dy * (ny - 1)), u[midX, j] / uTop));

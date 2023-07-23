@@ -1,18 +1,12 @@
-﻿using OxyPlot;
-using OxyPlot.Series;
-using OxyPlot.Axes;
-using System.Diagnostics;
-using Timer = System.Windows.Forms.Timer;
+﻿using System.Diagnostics;
 using OxyPlot.WindowsForms;
-using MathNet.Numerics.LinearAlgebra.Factorization;
-using System.Windows.Forms;
 
 namespace CFD_Demo
 {
     public partial class Form1 : Form
     {
         private PMCollection? pmCollection;
-        private float reynolds;
+        private double reynolds;
         public Form1()
         {
             InitializeComponent();
@@ -88,7 +82,7 @@ namespace CFD_Demo
             var dyi2 = dyi * dyi;
             var dxy2i = 1 / (dx2 + dy2);
 
-            //Arrays for velocities and pressure
+            //Arrays for velocities and pressure set to zero by default
             var u = new double[nx, ny];
             var v = new double[nx, ny];
             double[,] uStar = new double[nx, ny];
@@ -103,9 +97,10 @@ namespace CFD_Demo
             {
                 //Top edge
                 u[i, ny - 1] = uTop;
-                p[i, ny - 1] = 1;
+                p[i, ny - 1] = 1;             
             }
-            //The top corner u's should be set to zero
+
+            //Overwrite top corner u's to zero
             u[0, ny - 1] = 0;
             u[nx - 1, ny - 1] = 0;
 
@@ -153,7 +148,7 @@ namespace CFD_Demo
                 });
 
                 //Note: Although it's possible to do so (because the solution converges as t increases),
-                //doing the pressure steps in parallel with the momentum steps does not reduce compute time
+                //doing the pressure steps in parallel with the momentum calcs does not reduce compute time
                 //significantly (only about 0.1s)
 
                 //RHS term of PPE
@@ -166,14 +161,15 @@ namespace CFD_Demo
                     }
                 }
 
-                //Clone pressure array for a clear distinction between pn and pn + 1
-                double[,] pn = (double[,])p.Clone();
-
                 //Calculate pressure
                 //While optional iteration on p
                 int n = 0;
                 while (n < 1)
                 {
+                    //Clone pressure array for a clear distinction between pn and pn + 1
+                    double[,] pn = (double[,])p.Clone();
+
+                    //Calculate P
                     for (j = 1; j < ny - 1; j++)
                     {
                         for (i = 1; i < nx - 1; i++)
@@ -182,21 +178,21 @@ namespace CFD_Demo
                         }
                     }
 
-                    n++;
-                }
+                    ////Reset pressure boundary conditions
+                    ////Note that we do not need to reset u, v, p Dirichlet bc's
+                    for (i = 0; i < nx; i++)
+                    {
+                        //dp/dy = 0 at bottom (Neumann)
+                        p[i, 0] = p[i, 1];
+                    }
+                    for (j = 0; j < ny; j++)
+                    {
+                        //dp/dx = 0 at LHS and RHS (Neumann)
+                        p[0, j] = p[1, j];
+                        p[nx - 1, j] = p[nx - 2, j];
+                    }
 
-                //Reset pressure boundary conditions
-                //We do not need to reset u, v, p Dirichlet bc's
-                for (i = 0; i < nx; i++)
-                {
-                    //dp/dy = 0 at bottom (Neumann)
-                    p[i, 0] = p[i, 1];
-                }
-                for (j = 0; j < ny; j++)
-                {
-                    //dp/dx = 0 at LHS and RHS (Neumann)
-                    p[0, j] = p[1, j];
-                    p[nx - 1, j] = p[nx - 2, j];
+                    n++;
                 }
 
                 //Pressure correction step with central differencing for dp
@@ -214,32 +210,32 @@ namespace CFD_Demo
             DisplayTime(watch.Elapsed.ToString());
 
             //Calculate and display Reynolds number
-             if (nu > 0)
-                reynolds = (float)(uTop * Lx / nu);
-            else
-                reynolds = 0;
-
-            DisplayRe("Re: " + reynolds.ToString());
+            DisplayRe(nu, uTop, Lx);
 
             //Display CFL
-            float CFL = (float)(uTop * dt * dxi);
-            if (dx > 0)
-            {
-                DisplayCFL("CFL : " + CFL.ToString());
-            }
+            DisplayCFL(nu, uTop, dxi, dt);      
 
             PMCollection pmCollection = new(nx, ny, reynolds, uTop, dx, dy, x, y, u, p, v);
 
             return pmCollection;
         }
 
-        private void DisplayRe(string txt)
+        private void DisplayRe(double nu, double uTop, double Lx)
         {
-            label14.Text = txt;
+            //Calculate and display Reynolds number
+            if (nu > 0)
+                reynolds = Math.Round((uTop * Lx / nu), 2);
+            else
+                reynolds = 0;
+
+            label14.Text = "Re: " + reynolds.ToString("0.00");
         }
-        private void DisplayCFL(string txt)
+        private void DisplayCFL(double nu, double uTop, double dxi, float dt)
         {
-            label5.Text = txt;
+            double CFL = Math.Round((uTop * dt * dxi), 3);
+            double vN = Math.Round((2* nu * dt * dxi * dxi), 3);
+
+            label5.Text = "CFL/v Neumann: " + CFL.ToString("0.000") + " / " + vN.ToString("0.000");
         }
 
         private void DisplayTime(string txt)
@@ -276,9 +272,8 @@ namespace CFD_Demo
             f.FileName = plotModel.Title + ".png";
             if (f.ShowDialog() == DialogResult.OK)
             {
-                var pngExporter = new PngExporter { Width = 800, Height = 800, Resolution = 120 };
+                var pngExporter = new PngExporter { Width = 800, Height = 800, Resolution = 300 };
                 pngExporter.ExportToFile(plotModel, f.FileName);
-
             }
         }
 
