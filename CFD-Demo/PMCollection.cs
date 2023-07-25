@@ -12,6 +12,20 @@ namespace CFD_Demo
         public PlotModel pModel;
         public PlotModel lModel;
 
+        /// <summary>
+        /// Creates a collection of plot maps that show u, v, p and centerline u velocities
+        /// </summary>
+        /// <param name="nx"></param>
+        /// <param name="ny"></param>
+        /// <param name="re"></param>
+        /// <param name="uTop"></param>
+        /// <param name="dx"></param>
+        /// <param name="dy"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="u"></param>
+        /// <param name="v"></param>
+        /// <param name="p"></param>
         public PMCollection(int nx, int ny, double re, double uTop, double dx, double dy, double[] x, double[] y, double[,] u, double[,] v, double[,] p)
         {
 

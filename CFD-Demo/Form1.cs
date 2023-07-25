@@ -215,7 +215,7 @@ namespace CFD_Demo
             //Display CFL
             DisplayCFL(nu, uTop, dxi, dt);      
 
-            PMCollection pmCollection = new(nx, ny, reynolds, uTop, dx, dy, x, y, u, p, v);
+            PMCollection pmCollection = new(nx, ny, reynolds, uTop, dx, dy, x, y, u, v, p);
 
             return pmCollection;
         }
