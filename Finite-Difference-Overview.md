@@ -2,12 +2,15 @@
 
 Starting with Newton's Second Law of motion and applying it to an incompressible fluid, we can derive two equations that describe the motion of the fluid. These are known as the Navier-Stokes equations:
 
-$$\begin{equation}\frac{\partial \textbf{u}}{\partial t} + \textbf{u}\cdot{\nabla}\textbf{u} = -{\frac{1}{\rho}}{\nabla}{p} + \nu{\nabla}^2\textbf{u}\end{equation}$$
+$$
+\begin{equation}\frac{\partial \textbf{u}}{\partial t} + \textbf{u}\cdot{\nabla}\textbf{u} = -{\frac{1}{\rho}}{\nabla}{p} + \nu{\nabla}^2\textbf{u} \tag{1}
+\end{equation}
+$$
 
 $$\begin{equation}\nabla \cdot \textbf{u} = 0\end{equation}$$
 
 In this document we will be dealing with two-dimensional
-fluid flow, so in these and subsequent equations the variables repesent **u** = [u, v], a two-dimensional velocity vector, t is time, $$\rho$$ is density,
+fluid flow, so in these and subsequent equations the variables represent **u** = [u, v], a two-dimensional velocity vector, t is time, $$\rho$$ is density,
 p is pressure, and $$\nu$$ is the kinematic viscosity.
 
 ## Finite Difference
