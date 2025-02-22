@@ -94,7 +94,7 @@ then corrects for pressure in a second step.
 Dropping the pressure term from equation 3 and rewriting $$\mathbf{u}^{n+1}$$ as $$\mathbf{u}^*$$ gives the predictor equation:
 
 $$
-\mathbf{u}^*=\left(- \mathbf{u}^n \cdot \nabla \mathbf{u}^n + \nu \nabla ^2 \mathbf{u}^n \right)\Delta t + \mathbf{u}^n
+\mathbf{u}^*=\left(- \mathbf{u}^n \cdot \nabla \mathbf{u}^n + \nu \nabla ^2 \mathbf{u}^n \right)\Delta t + \mathbf{u}^n \qquad (3)
 $$
 
 Where:
@@ -124,7 +124,7 @@ $$
 ### The Corrector Step and von Neuman Boundary Condition Reset
 
 After separately calculating a value for $$\mathbf{u}^*$$,
-we substitute it back into equation (5).
+we substitute it back into equation (3).
 
 Before proceeding to the next timestep,
 we first set von Neuman boundary conditions—the derivatives of u and v at the boundary are set to 0 by adjusting the value of u and v at the nodes adjacent to the boundary to match those at the boundary nodes.
