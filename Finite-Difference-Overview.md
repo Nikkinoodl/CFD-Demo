@@ -5,11 +5,11 @@ we can derive two equations that describe the motion of the fluid.
 These are known as the Navier-Stokes equations:
 
 $$
-\frac{\partial \textbf{u}}{\partial t} + \textbf{u}\cdot{\nabla}\textbf{u} = -{\frac{1}{\rho}}{\nabla}{p} + \nu{\nabla}^2\textbf{u}
+\frac{\partial \textbf{u}}{\partial t} + \textbf{u}\cdot{\nabla}\textbf{u} = -{\frac{1}{\rho}}{\nabla}{p} + \nu{\nabla}^2\textbf{u} \qquad (1)
 $$
 
 $$
-\nabla \cdot \textbf{u} = 0
+\nabla \cdot \textbf{u} = 0   \qquad (2)
 $$
 
 In this document we will be dealing with two-dimensional fluid flow,
@@ -67,6 +67,7 @@ After setting Dirichlet conditions,
 we start to propogate velocity and pressure through the domain in steps of time until they (hopefully) become stable in value.
 
 At the nth timestep we have:
+
 $$
 \frac{\mathbf{u}^{n+1}-\mathbf{u}^n}{\Delta t}=-\frac{1}{\rho}\nabla p^{n+1} - \mathbf{u}^n \cdot \nabla \mathbf{u}^n + \nu \nabla ^2 \mathbf{u}^n
 $$
@@ -74,7 +75,7 @@ $$
 Which can be rewritten as:
 
 $$
-\mathbf{u}^{n+1}=\left( -\frac{1}{\rho}\nabla p^{n+1}  - \mathbf{u}^n \cdot \nabla \mathbf{u}^n + \nu \nabla ^2 \mathbf{u}^n \right)\Delta t + \mathbf{u}^n
+\mathbf{u}^{n+1}=\left( -\frac{1}{\rho}\nabla p^{n+1}  - \mathbf{u}^n \cdot \nabla \mathbf{u}^n + \nu \nabla ^2 \mathbf{u}^n \right)\Delta t + \mathbf{u}^n \qquad (3)
 $$
 
 ### The SIMPLE Method
@@ -90,7 +91,7 @@ then corrects for pressure in a second step.
 
 ### The Predictor Step
 
-Dropping the pressure term and rewriting $$\mathbf{u}^{n+1}$$ as $$\mathbf{u}^*$$ gives the predictor equation:
+Dropping the pressure term from equation 3 and rewriting $$\mathbf{u}^{n+1}$$ as $$\mathbf{u}^*$$ gives the predictor equation:
 
 $$
 \mathbf{u}^*=\left(- \mathbf{u}^n \cdot \nabla \mathbf{u}^n + \nu \nabla ^2 \mathbf{u}^n \right)\Delta t + \mathbf{u}^n
