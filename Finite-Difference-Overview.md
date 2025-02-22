@@ -5,11 +5,11 @@ we can derive two equations that describe the motion of the fluid.
 These are known as the Navier-Stokes equations:
 
 $$
-\frac{\partial \textbf{u}}{\partial t} + \textbf{u}\cdot{\nabla}\textbf{u} = -{\frac{1}{\rho}}{\nabla}{p} + \nu{\nabla}^2\textbf{u}
+\frac{\partial \textbf{u}}{\partial t} + \textbf{u}\cdot{\nabla}\textbf{u} = -{\frac{1}{\rho}}{\nabla}{p} + \nu{\nabla}^2\textbf{u} \ldots \ldots (1)
 $$
 
 $$
-\nabla \cdot \textbf{u} = 0
+\nabla \cdot \textbf{u} = 0 \ldots \ldots (2)
 $$
 
 In this document we will be dealing with two-dimensional fluid flow,
