@@ -14,14 +14,14 @@ $$
 $$
 
 In this document we will only be dealing with two-dimensional fluid flow,
-so in these and subsequent equations the variables we ae using represent
+so in these and subsequent equations the variables we are using represent
 **u** = [u, v], a two-dimensional velocity vector,
 t is time,
 $\rho$ is density,
 p is pressure,
 and $\nu$ is the kinematic viscosity.
 
-## Finite Difference
+## Finite Difference Method
 
 There are a mere handful of cases where we can obtain an exact solution for these equations,
 and no general solution is known to exist.
@@ -84,7 +84,7 @@ $$
 \mathbf{u}^{n+1}=\left( -\frac{1}{\rho}\nabla p^{n+1}  - \mathbf{u}^n \cdot \nabla \mathbf{u}^n + \nu \nabla ^2 \mathbf{u}^n \right)\Delta t + \mathbf{u}^n \qquad (3)
 $$
 
-### The SIMPLE Method
+### The SIMPLE Method 
 
 Equation (1) represents the conservation of momentum.
 Equation (2) represents mass conservation at constant density.
@@ -94,7 +94,7 @@ There is no pressure term in the incompressible continuity equation (2) to provi
 which we use along with an equation of state to relate density and pressure). 
 
 The workaround is to use a predictor-corrector method which first solves for velocity in the absence of pressure,
-then corrects for pressure in a second step.
+then correct for pressure in a second step.
 
 ### The Predictor Step
 
@@ -107,7 +107,7 @@ $$
 Where:
 
 $$
-\frac{\mathbf{u}^{n+1}-\mathbf{u}^*}{\Delta t}=-\frac{1}{\rho}\nabla p^{n+1}
+\frac{\mathbf{u}^{n+1}-\mathbf{u}^*}{\Delta t}=-\frac{1}{\rho}\nabla p^{n+1} \qquad (4)
 $$
 
 ### The Pressure Poisson Equation
@@ -127,16 +127,30 @@ $$
 Therefore:
 
 $$
-\nabla ^2 p^{n+1} = \frac{\rho}{\Delta t} \nabla \cdot \mathbf{u}^*
+\nabla ^2 p^{n+1} = \frac{\rho}{\Delta t} \nabla \cdot \mathbf{u}^* \qquad (5)
 $$
 
-### The Corrector Step and von Neuman Boundary Condition Reset
+Equation (5) is known as the Pressure Poisson equation. 
+Using the values for $\mathbf u^*$ from (3), it is now possible to either solve it directly using matrix algebra,
+[ref 2],
+or derive an equation for $p_{i, j}^{n+1}$ [ref 1]
 
-After separately calculating a value for $\mathbf{u}^*$,
-we substitute it back into equation (3).
+### Neuman Boundary Condition Reset
 
-Before proceeding to the next timestep,
-we set von Neuman boundary conditions—the derivatives of u and v at the boundary are set to 0 by adjusting the value of u and v at the nodes adjacent to the boundary to match those at the boundary nodes.
+Before proceeding to the next timestep, we set Neuman boundary conditions.
+The derivatives $\frac{\partial p}{\partial x}$ at the left and right boundary and
+$\frac{\partial p}{\partial y}$ at the bottom boundary are set to 0.
+We do this by changing the value of p at the adjacent nodes to match those at the boundary nodes.
+
+### Corrector Step
+
+With the value for p now at hand, we substitute for p into equation (4) which we rewrite as:
+
+$$
+\mathbf{u}^{n+1}=\Delta t\left( - \frac{1}{\rho}  \nabla p^{n+1}\right) + \mathbf{u}^*
+$$
+
+Then proceed to the next timestep.
 
 ## Further Reading
 
