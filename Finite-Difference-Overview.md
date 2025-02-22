@@ -40,32 +40,34 @@ The diagrammatic representation of the grid shown below is commonly referred to 
 On a stencil like this one we can then derive approximate expressions for derivatives as:
 
 $$
-\frac{\partial u}{\partial x} \simeq  \frac {u_{i+1, j} - u_{i, j}}{\Delta x}
+\frac{\partial u}{\partial x}_{i,j} \simeq  \frac {u_{i+1, j} - u_{i, j}}{\Delta x}
 $$
 
 and second derivatives as:
 
 $$
-\frac{\partial u}{\partial x} \simeq  \frac {u_{i-1, j} - 2u_{i, j} + u_{i+1, j}}{\Delta x^2}
+\frac{\partial^2 u}{\partial x^2}_{i,j} \simeq  \frac {u_{i-1, j} - 2u_{i, j} + u_{i+1, j}}{\Delta x^2}
 $$
 
-We do the same thing for the vertical component of velocity v, and also for pressure p.
+We do the same thing for other variables such as the vertical component of velocity and for pressure p.
 It is obvious that the accuracy of this approximation increases as the grid becomes smaller.
 
-While these approximations are reasonably straightforward,
+While these approximations are straightforward,
 the Navier-Stokes equations are non-linear in $\mathbf u$.
 They cannot be solved directly using an $A \mathbf x = b$ type solver.
+
 Instead, we must solve them iteratively.
 
 ### Setting Boundary Conditions
 
 The solution begins by setting Dirichlet conditions at the domain boundary.
-These are simply fixed values for the u and v components of **u** which will remain unchanged in the subsequent calculations.
+These are simply fixed values for the u and v components of **u**
+which will remain unchanged in the subsequent calculations.
 
 In this project's code,
 u and v are set everywhere to 0 except on the cavity lid where u is set to the chosen lid velocity.
 
-We also set a nominal initial value for p = 1 at node index [0,0].
+We also set a nominal initial value for p = 1 on the cavity lid nodes.
 
 ### Temporal Discretization
 
