@@ -254,9 +254,9 @@ vStar[i, j] = v[i, j] +
 ```
 The right hand side of the Pressure Poisson equation (5) is then calculated as:
 
-$$
-{b} = \frac{\rho}{\Delta t} \left( \frac{\partial u^{*}}{\partial x} + \frac{\partial v^{*}}{\partial y} \right)
-$$
+```math
+b = \frac{\rho}{\Delta t} \left( \frac{\partial u^{*}}{\partial x} + \frac{\partial v^{*}}{\partial y} \right)
+```
 
 In C#:
 
