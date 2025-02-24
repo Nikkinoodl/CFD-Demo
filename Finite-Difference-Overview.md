@@ -68,13 +68,13 @@ The diagrammatic representation of the grid shown below is commonly referred to 
 On a stencil like this one we can then derive approximate expressions for derivatives as:
 
 $$
-{\frac{\partial u}{\partial x}_{i,j} \simeq  \frac {u_{i+1, j} - u_{i, j}}{\Delta x} }
+{\frac{\partial u}{\partial x}(i,j) \simeq \frac {u(i+1, j) - u(i, j)}{\Delta x} }
 $$
 
 and second derivatives as:
 
 $$
-{\frac{\partial^2 u}{\partial x^2}_{i,j} \simeq  \frac {u_{i-1, j} - 2u_{i, j} + u_{i+1, j}}{\Delta x^{2}} }
+{\frac{\partial^2 u}{\partial x^2}(i,j) \simeq \frac {u(i-1, j) - 2u(i, j) + u(i+1, j)}{\Delta x^{2}} }
 $$
 
 We do the same thing for other variables such as the vertical component of velocity and for pressure p.
@@ -255,7 +255,7 @@ vStar[i, j] = v[i, j] +
 The right hand side of the Pressure Poisson equation (5) is then calculated as:
 
 $$
-{b = \frac{\rho}{\Delta t} \left( \frac{\partial u^*}{\partial x} + \frac{\partial v^*}{\partial y} \right)}
+{b} = \frac{\rho}{\Delta t} \left( \frac{\partial u^{*}}{\partial x} + \frac{\partial v^{*}}{\partial y} \right)
 $$
 
 In C#:
