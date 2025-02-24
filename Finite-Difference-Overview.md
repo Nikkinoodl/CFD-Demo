@@ -287,9 +287,7 @@ $$
 p^{n+1}(i-1,j)\Delta y^2 - 2p^{n+1}(i,j)\Delta y^2 + p^{n+1}(i+1,j)\Delta y^2  + p^{n+1}(i-1,j)\Delta x^2 - 2p^{n+1}(i,j)\Delta x^2 + p^{n+1}(i+1,j)\Delta x^2   = b^n(i,j) \Delta x^2 \Delta y^2
 $$
 
-$$
- - 2\left( \Delta y^2 + \Delta x^2 \right) p^{n+1}(i,j)    = - \Delta y^2 \left(p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) - \Delta x^2 \left( p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) + b^n(i,j) \Delta x^2 \Delta y^2
-$$
+$$-2\left( \Delta y^2 + \Delta x^2 \right) p^{n+1}(i,j)    = - \Delta y^2 \left(p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) - \Delta x^2 \left( p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) + b^n(i,j) \Delta x^2 \Delta y^2$$
 
 Finally giving:
 
