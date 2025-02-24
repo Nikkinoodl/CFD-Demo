@@ -68,13 +68,13 @@ The diagrammatic representation of the grid shown below is commonly referred to 
 On a stencil like this one we can then derive approximate expressions for derivatives as:
 
 $$
- \frac{\partial u}{\partial x}_{i,j} \simeq  \frac {u_{i+1, j} - u_{i, j}}{\Delta x} 
+\frac{\partial u}{\partial x}_{i,j} \simeq  \frac {u_{i+1, j} - u_{i, j}}{\Delta x} 
 $$
 
 and second derivatives as:
 
 $$
- \frac{\partial^2 u}{\partial x^2}_{i,j} \simeq  \frac {u_{i-1, j} - 2u_{i, j} + u_{i+1, j}}{\Delta x^2} 
+\frac{\partial^2 u}{\partial x^2}_{i,j} \simeq  \frac {u_{i-1, j} - 2u_{i, j} + u_{i+1, j}}{\Delta x^{2}} 
 $$
 
 We do the same thing for other variables such as the vertical component of velocity and for pressure p.
@@ -254,9 +254,7 @@ vStar[i, j] = v[i, j] +
 ```
 The right hand side of the Pressure Poisson equation (5) is then calculated as:
 
-$$
-b = \frac{\rho}{\Delta t} \left( \frac{\partial u^*}{\partial x} + \frac{\partial v^*}{\partial y} \right)
-$$
+$$b = \frac{\rho}{\Delta t} \left( \frac{\partial u^*}{\partial x} + \frac{\partial v^*}{\partial y} \right)$$
 
 In C#:
 
@@ -315,8 +313,12 @@ p[i, j] = ((pn[i + 1, j] + pn[i - 1, j]) * dy2 + (pn[i, j + 1] + pn[i, j - 1]) *
 
 The pressure correction step (6) is then:
 
-$$u^{n+1}=-\frac{\Delta t}{\rho}\left(\frac{\partial p^{n+1}}{\partial x} \right) + u^*$$
-$$v^{n+1}=-\frac{\Delta t}{\rho}\left( \frac{\partial p^{n+1}}{\partial y}\right) + v^*$$
+$$
+u^{n+1}=-\frac{\Delta t}{\rho}\left(\frac{\partial p^{n+1}}{\partial x} \right) + u^{*}
+$$
+$$
+v^{n+1}=-\frac{\Delta t}{\rho}\left( \frac{\partial p^{n+1}}{\partial y}\right) + v^{*}
+$$
 
 In C#:
 
