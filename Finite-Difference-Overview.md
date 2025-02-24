@@ -217,7 +217,7 @@ var dxy2i = 1 / (dx2 + dy2);
 
 ```
 
-The calculation for $\mathbf u^*$ in (3) is done by calculating
+In the time loop, the calculation for $\mathbf u^*$ in (3) is done by calculating
 each vector component separately in parallel: 
 
 $$
@@ -267,24 +267,48 @@ b[i, j] = rho * ((uStar[i + 1, j] - uStar[i - 1, j]) * 0.5 * dxi + (vStar[i, j +
 ```
 The left hand side can then be written as:
 
-$$\frac{\partial ^2 p^{n+1}}{\Delta x^2}+ \frac{\partial ^2 p^{n+1}}{\Delta y^2} = b$$
+$$
+\frac{\partial ^2 p^{n+1}}{\Delta x^2}+ \frac{\partial ^2 p^{n+1}}{\Delta y^2} = b
+$$
 
-$$\frac{p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j)}{\Delta x^2}+ \frac{p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j)}{\Delta y^2} = b$$
+$$
+\frac{p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j)}{\Delta x^2}+ \frac{p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j)}{\Delta y^2} = b
+$$
 
-$$\frac{\left(p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j)\right) \Delta y^2 + \left( p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j) \right) \Delta x^2}{\Delta x^2 \Delta y^2} = b$$
+$$
+\frac{\left(p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j)\right) \Delta y^2 + \left( p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j) \right) \Delta x^2}{\Delta x^2 \Delta y^2} = b
+$$
 
-$$\left(p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j)\right) \Delta y^2 + \left( p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j) \right) \Delta x^2 = b^n(i,j) \Delta x^2 \Delta y^2$$
+$$
+\left(p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j)\right) \Delta y^2 + \left( p^{n+1}(i-1,j) - 2p^{n+1}(i,j) + p^{n+1}(i+1,j) \right) \Delta x^2 = b^n(i,j) \Delta x^2 \Delta y^2
+$$
 
-$$p^{n+1}(i-1,j)\Delta y^2 - 2p^{n+1}(i,j)\Delta y^2 + p^{n+1}(i+1,j)\Delta y^2  + p^{n+1}(i-1,j)\Delta x^2 - 2p^{n+1}(i,j)\Delta x^2 + p^{n+1}(i+1,j)\Delta x^2   = b^n(i,j) \Delta x^2 \Delta y^2$$
+$$
+p^{n+1}(i-1,j)\Delta y^2 - 2p^{n+1}(i,j)\Delta y^2 + p^{n+1}(i+1,j)\Delta y^2  + p^{n+1}(i-1,j)\Delta x^2 - 2p^{n+1}(i,j)\Delta x^2 + p^{n+1}(i+1,j)\Delta x^2   = b^n(i,j) \Delta x^2 \Delta y^2
+$$
 
-$$ - 2\left( \Delta y^2 + \Delta x^2 \right) p^{n+1}(i,j)    = - \Delta y^2 \left(p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) - \Delta x^2 \left( p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) + b^n(i,j) \Delta x^2 \Delta y^2$$
+$$
+- 2\left( \Delta y^2 + \Delta x^2 \right) p^{n+1}(i,j)    = - \Delta y^2 \left(p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) - \Delta x^2 \left( p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) + b^n(i,j) \Delta x^2 \Delta y^2
+$$
 
 Finally giving:
 
-$$ p^{n+1}(i,j)    = \frac{\Delta y^2 \left(p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) + \Delta x^2 \left( p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) - b^n(i,j) \Delta x^2 \Delta y^2}{2\left( \Delta y^2 + \Delta x^2 \right) }$$
+$$
+p^{n+1}(i,j)    = \frac{\Delta y^2 \left(p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) + \Delta x^2 \left( p^{n+1}(i-1,j) + p^{n+1}(i+1,j) \right) - b^n(i,j) \Delta x^2 \Delta y^2}{2\left( \Delta y^2 + \Delta x^2 \right) }
+$$
+
+In the code, we clone the pressure array for a clear distinction between $p^{n}$ and $p^{n+1}$.
 
 In C#:
+```
 
+double[,] pn = (double[,])p.Clone();
+
+```
+
+Then solve for $p^{n+1}$.
+
+In C#:
 ```
 
 p[i, j] = ((pn[i + 1, j] + pn[i - 1, j]) * dy2 + (pn[i, j + 1] + pn[i, j - 1]) * dx2 - b[i, j] * dx2 * dy2) * 0.5 * dxy2i;
