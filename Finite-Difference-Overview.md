@@ -197,7 +197,7 @@ For example, constants and variables used in division are inverted
 to enable multiplication instead.
 
 In C#:
-```
+```Csharp
 
 var rhoi = 1 / rho;
 
@@ -205,7 +205,7 @@ var rhoi = 1 / rho;
 
 also:
 
-```
+```Csharp
 
 var dx2 = dx * dx;
 var dy2 = dy * dy;
@@ -226,7 +226,7 @@ $$
 
 In C#:
 
-```
+```Csharp
 
 uStar[i, j] = u[i, j] +
               dt * (nu * (u[i - 1, j] - 2 * u[i, j] + u[i + 1, j]) * dxi2 +
@@ -243,7 +243,7 @@ $$
 
 In C#:
 
-```
+```Csharp
 
 vStar[i, j] = v[i, j] +
               dt * (nu * (v[i - 1, j] - 2 * v[i, j] + v[i + 1, j]) * dxi2 +
@@ -260,7 +260,7 @@ b = \frac{\rho}{\Delta t} \left( \frac{\partial u^{*}}{\partial x} + \frac{\part
 
 In C#:
 
-```
+```Csharp
 
 b[i, j] = rho * ((uStar[i + 1, j] - uStar[i - 1, j]) * 0.5 * dxi + (vStar[i, j + 1] - vStar[i, j - 1]) * 0.5 * dyi) / dt;
 
@@ -298,7 +298,7 @@ $$
 In the code, we clone the pressure array for a clear distinction between $p^{n}$ and $p^{n+1}$.
 
 In C#:
-```
+```Csharp
 
 double[,] pn = (double[,])p.Clone();
 
@@ -307,7 +307,7 @@ double[,] pn = (double[,])p.Clone();
 Then solve for $p^{n+1}$.
 
 In C#:
-```
+```Csharp
 
 p[i, j] = ((pn[i + 1, j] + pn[i - 1, j]) * dy2 + (pn[i, j + 1] + pn[i, j - 1]) * dx2 - b[i, j] * dx2 * dy2) * 0.5 * dxy2i;
 
@@ -325,7 +325,7 @@ $$
 
 In C#:
 
-```
+```Csharp
 
 u[i, j] = uStar[i, j] - (p[i + 1, j] - p[i - 1, j]) * 0.5 * dxi * dt * rhoi;
 v[i, j] = vStar[i, j] - (p[i, j + 1] - p[i, j - 1]) * 0.5 * dyi * dt * rhoi;
