@@ -61,7 +61,7 @@ of evenly sized rectangular elements.
 The solution is developed at the grid's nodes,
 using the grid's geometry to approximate the derivatives of u and p.
 
-The diagrammatic representation of the grid shown below is commonly referred to as a stencil.
+The diagrammatic representation of a set of neighboring grid elements as shown below is commonly referred to as a stencil.
 
 ![Stencil of the discretization grid](FVM-1.png)
 
@@ -96,7 +96,7 @@ In this project's code,
 u and v are set everywhere to 0 except on the cavity lid nodes where
 u is set to the chosen lid velocity.
 
-We set a nominal initial value for p = 0 eveywhere except on the cavity lid nodes where
+We set a nominal initial value for p = 0 everywhere except on the cavity lid nodes where
 we set p = 1.
 
 ## 5.2. Temporal Discretization
